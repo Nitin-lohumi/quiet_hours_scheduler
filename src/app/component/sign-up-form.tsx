@@ -48,57 +48,56 @@ export function SignUpForm({
   };
 
   return (
-    <div {...props}>
+    <div {...props} className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
       <div>
-        <div>
-          <p className="text-2xl">Sign up</p>
-          <p>Create a new account</p>
+        <div className="p-1 mb-3">
+          <p className="text-2xl text-center font-serif mb-2">SignUp</p>
+          <p className="font-serif">Enter your Details below</p>
+          <hr className="border-amber-100 pb-1" />
         </div>
         <div>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <label htmlFor="email">Email</label>
                 <input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="Enter your Email"
+                  className="p-1 pl-2 outline rounded-xl"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <label htmlFor="password">Password</label>
-                </div>
                 <input
                   id="password"
                   type="password"
+                  placeholder="Enter A Strong Password"
+                  className="p-1 pl-2 outline rounded-xl"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <label htmlFor="repeat-password">Repeat Password</label>
-                </div>
                 <input
                   id="repeat-password"
                   type="password"
+                  placeholder="Enter your Confirm Password"
+                  className="p-1 pl-2 outline rounded-xl"
                   required
                   value={repeatPassword}
                   onChange={(e) => setRepeatPassword(e.target.value)}
                 />
               </div>
-              <button type="submit" className="w-full" disabled={isLoading}>
+              <button type="submit" className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100" disabled={isLoading}>
                 {isLoading ? "Creating an account..." : "Sign up"}
               </button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-4 text-center text-lg">
               Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4">
+              <Link href="/auth/login" className="underline underline-offset-4 text-blue-600">
                 Login
               </Link>
             </div>

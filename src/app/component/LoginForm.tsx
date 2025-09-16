@@ -33,45 +33,51 @@ export function LoginForm({
   };
 
   return (
-    <div {...props}>
+    <div {...props} className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
       <div>
-        <div>
-          <p className="text-2xl">Login</p>
-          <p>Enter your email below to login to your account</p>
+        <div className="p-1 mb-3">
+          <p className="text-2xl text-center font-serif mb-2">Login</p>
+          <p className="font-serif">Enter your Details below</p>
+          <hr className="border-amber-100 pb-1" />
         </div>
         <div>
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <label htmlFor="email">Email</label>
                 <input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  className="p-1 pl-2 outline rounded-xl"
+                  placeholder="Enter your Email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
-                <div className="flex items-center">
-                  <label htmlFor="password">Password</label>
-                  <Link
-                    href="/auth/forgetPassword"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    Forgot your password?
-                  </Link>
-                </div>
                 <input
                   id="password"
                   type="password"
                   required
+                  placeholder="Enter your password"
+                  className="p-1 pl-2 outline rounded-xl"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <button type="submit" className="w-full" disabled={isLoading}>
+              <div className="flex items-center m-0">
+                <Link
+                  href="/auth/forgetPassword"
+                  className="ml-auto text-sm underline-offset-4 hover:underline text-blue-600"
+                >
+                  Forgot your password?
+                </Link>
+              </div>
+              <button
+                type="submit"
+                className="w-full border cursor-pointer rounded-xs p-1 hover:bg-gray-100"
+                disabled={isLoading}
+              >
                 {isLoading ? "Logging in..." : "Login"}
               </button>
             </div>
@@ -79,7 +85,7 @@ export function LoginForm({
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/signup"
-                className="underline underline-offset-4"
+                className="underline underline-offset-4 text-blue-800"
               >
                 Sign up
               </Link>
