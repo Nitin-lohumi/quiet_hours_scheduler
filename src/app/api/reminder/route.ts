@@ -19,11 +19,11 @@ export async function GET() {
       if (taskDateTime < now) {
         if (!val.expire) {
           console.log("Expired");
+          obje.push("expiree");
           await Task.updateOne({ _id: val._id }, { $set: { expire: true } });
         }
         continue;
       }
-
       if (taskDateTime >= now && taskDateTime <= tenMinLater && !val.notified) {
         const { data: user, error } = await supabase.auth.admin.getUserById(
           val.userId

@@ -7,8 +7,8 @@ interface Props {
 }
 export async function GET(req: Request, { params }: Props) {
   await connectDB();
-  const userId = params.id;
-  const tasks = await Task.find({ userId }).sort({
+  const { id } = params;
+  const tasks = await Task.find({ userId: id }).sort({
     date: 1,
     time: 1,
   });
@@ -16,6 +16,7 @@ export async function GET(req: Request, { params }: Props) {
 }
 export async function PUT(req: Request, { params }: Props) {
   await connectDB();
+  const { id } = params;
   const body = await req.json();
   const selectedDateTime = new Date(`${body.date}T${body.time}`);
   if (selectedDateTime < new Date()) {
@@ -24,7 +25,7 @@ export async function PUT(req: Request, { params }: Props) {
       { status: 400 }
     );
   }
-  const updatedTask = await Task.findByIdAndUpdate(params.id, body, {
+  const updatedTask = await Task.findByIdAndUpdate(id, body, {
     new: true,
   });
   if (!updatedTask) {
@@ -35,7 +36,8 @@ export async function PUT(req: Request, { params }: Props) {
 
 export async function DELETE(req: Request, { params }: Props) {
   await connectDB();
-  const deleted = await Task.findByIdAndDelete(params.id);
+    const { id } = params;
+  const deleted = await Task.findByIdAndDelete(id);
   if (!deleted) {
     return NextResponse.json({ error: "Task not found" }, { status: 404 });
   }
