@@ -1,45 +1,54 @@
 "use client";
 import React, { useState } from "react";
 import { UseStores } from "@/stores/Store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+interface TaskInput {
+  task: string;
+  date: string;
+  time: string;
+  userId?: string;
+}
+
+const createTaskApi = async (task: TaskInput) => {
+  const res = await axios.post("/api/task", task);
+  return res.data;
+};
+
 function CreateTask() {
   const { user } = UseStores();
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<TaskInput>({
     task: "",
     date: "",
     time: "",
   });
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    mutationFn: createTaskApi,
+    onSuccess: () => {
+      setForm({ task: "", date: "", time: "" });
+      queryClient.invalidateQueries({ queryKey: ["tasks", user?.id] });
+      toast.success("✅Task Created Successfully!");
+    },
+    onError: () => {
+      toast.error(" Failed to create task");
+    },
+  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-  const handleSubmit = async (e: React.FormEvent) => {
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.task || !form.date || !form.time) {
-      alert("Please fill all fields");
+      toast.warning(" Please fill all fields");
       return;
     }
-    setLoading(true);
-    try {
-      const res = await fetch("/api/task", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, userId: user?.id }),
-      });
-
-      if (res.ok) {
-        alert("✅ Task Created Successfully!");
-        setForm((prev) => ({ ...prev, task: "", date: "", time: "" }));
-        window.location.reload();
-      } else {
-        alert("❌ Failed to create task");
-      }
-    } catch (error) {
-      console.error("Error creating task:", error);
-      alert("Server error");
-    } finally {
-      setLoading(false);
-    }
+    mutate({ ...form, userId: user?.id });
   };
 
   return (
@@ -77,10 +86,10 @@ function CreateTask() {
       </div>
       <button
         type="submit"
-        disabled={loading}
+        disabled={isPending}
         className="w-full hover:bg-gray-300 cursor-pointer rounded-xl shadow-xs shadow-blue-800 p-2"
       >
-        {loading ? "Saving..." : "Submit"}
+        {isPending ? "Saving..." : "Submit"}
       </button>
     </form>
   );

@@ -21,10 +21,13 @@ export async function GET() {
         }
         continue;
       }
+      console.log(val.userId);
+
       if (taskDateTime >= now && taskDateTime <= tenMinLater && !val.notified) {
         const { data: user, error } = await supabase.auth.admin.getUserById(
           val.userId
         );
+        console.log(error);
         if (error || !user?.user?.email) continue;
         const email = user.user.email;
         await transport.sendMail({

@@ -1,58 +1,68 @@
 "use client";
 import { UseStores } from "@/stores/Store";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 interface Task {
   _id: string;
   task: string;
   date: string;
   time: string;
+  notified: boolean;
+  expire: boolean;
 }
+
+const fetchTasks = async (userId: string): Promise<Task[]> => {
+  const res = await axios.get(`/api/tasks/${userId}`);
+  return res.data;
+};
+
+const deleteTaskApi = async (id: string) => {
+  await axios.delete(`/api/tasks/${id}`);
+};
+
+const updateTaskApi = async (task: Task) => {
+  await axios.put(`/api/tasks/${task._id}`, task);
+};
 
 function Body() {
   const { user } = UseStores();
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const queryClient = useQueryClient();
+  const {
+    data: tasks,
+    isLoading,
+    isError,
+    error,
+  } = useQuery<Task[]>({
+    queryKey: ["tasks", user?.id],
+    queryFn: () => fetchTasks(user?.id || ""),
+    enabled: !!user?.id,
+    staleTime: 2 * 60 * 1000,
+  });
 
-  const fetchTasks = React.useCallback(async () => {
-    try {
-      const res = await fetch(`/api/tasks/${user?.id}`);
-      const data = await res.json();
-      setTasks(data);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Error fetching tasks", err.message);
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [user?.id]);
+  const deleteMutation = useMutation({
+    mutationFn: deleteTaskApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks", user?.id] });
+    },
+  });
 
-  useEffect(() => {
-    fetchTasks();
-  }, [fetchTasks]);
+  const updateMutation = useMutation({
+    mutationFn: updateTaskApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tasks", user?.id] });
+      setEditingTask(null);
+    },
+  });
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     if (!confirm("Are you sure to delete this task?")) return;
-    try {
-      const res = await fetch(`/api/tasks/${id}`, {
-        method: "DELETE",
-      });
-
-      if (res.ok) {
-        setTasks((prev) => prev.filter((t) => t._id !== id));
-      } else {
-        alert("Failed to delete");
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Error  tasks", err.message);
-      }
-    }
+    deleteMutation.mutate(id);
   };
 
-  const handleUpdate = async () => {
+  const handleUpdate = () => {
     if (!editingTask) return;
     const selectedDateTime = new Date(
       `${editingTask.date}T${editingTask.time}`
@@ -61,34 +71,16 @@ function Body() {
       alert("❌ Cannot set task in the past!");
       return;
     }
-    try {
-      const res = await fetch(`/api/tasks/${editingTask._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editingTask),
-      });
-
-      if (res.ok) {
-        setTasks((prev: Task[]) =>
-          prev.map((t: Task) => (t._id === editingTask._id ? editingTask : t))
-        );
-        setEditingTask(null);
-      } else {
-        alert("Failed to update task");
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        console.error("Error tasks", err.message);
-      }
-    }
+    updateMutation.mutate(editingTask);
   };
 
-  if (loading) return <p>Loading tasks...</p>;
+  if (isLoading) return <p>Loading tasks...</p>;
+  if (isError) return <p>Error: {(error as Error).message}</p>;
 
   return (
     <div className="p-4 flex flex-col gap-4">
       <h2 className="text-xl font-bold">📌 Your Tasks</h2>
-      {tasks.map((task) =>
+      {tasks?.map((task) =>
         editingTask?._id === task._id ? (
           <div
             key={task._id}
@@ -145,7 +137,8 @@ function Body() {
             <div className="flex gap-2">
               <button
                 onClick={() => setEditingTask(task)}
-                className="px-2 py-1 bg-blue-500 text-white rounded"
+                disabled={task.expire}
+                className="px-2 py-1 bg-blue-500 text-white rounded disabled:bg-gray-600"
               >
                 Edit
               </button>
@@ -159,9 +152,9 @@ function Body() {
           </div>
         )
       )}
-      {tasks.length === 0 && <p>No tasks found. Create one!</p>}
     </div>
   );
 }
 
 export default Body;
+

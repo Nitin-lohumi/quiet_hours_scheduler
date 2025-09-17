@@ -3,6 +3,7 @@ import Header from "../component/Header";
 import { redirect } from "next/navigation";
 import { createClient } from "../../../utils/supabase/server";
 import WrapperComp from "./WrapperComp";
+import Providers from "./ReactQueryWrapper";
 async function layout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
@@ -15,7 +16,9 @@ async function layout({ children }: { children: React.ReactNode }) {
         <Header />
       </header>
       <div className="max-h-screen max-w-full border min-w-96 m-auto  h-[calc(100vh-3.1rem)] flex items-center justify-center">
-        <WrapperComp>{children}</WrapperComp>
+        <Providers>
+          <WrapperComp>{children}</WrapperComp>
+        </Providers>
       </div>
     </div>
   );
