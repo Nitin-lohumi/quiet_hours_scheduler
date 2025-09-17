@@ -2,7 +2,7 @@ import { connectDB } from "../../../../Db/Connect";
 import { Task } from "../../../../Model/TaskModel";
 import { createClient } from "../../../../utils/supabase/server";
 import transport from "../../../../services/NodeMailer";
-export default async function Get() {
+export async function GET() {
   try {
     await connectDB();
     const supabase = await createClient();
