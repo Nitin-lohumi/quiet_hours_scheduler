@@ -13,6 +13,7 @@ export async function GET() {
       $or: [{ expire: false }, { notified: false }],
     });
     let sentCount = 0;
+    const obje = [];
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}`);
       if (taskDateTime < now) {
@@ -29,9 +30,11 @@ export async function GET() {
         );
         console.log("notify");
         console.log(error && error);
+        obje.push(error);
         if (error || !user?.user?.email) continue;
         const email = user.user.email;
         console.log("user:by supabse- ", user.user.email);
+        obje.push(user.user.email);
         await transport.sendMail({
           from: process.env.MAIL_USER!,
           to: email,
@@ -42,10 +45,9 @@ export async function GET() {
         sentCount++;
       }
     }
-    return new Response(
-      JSON.stringify({ success: true, remindersSent: sentCount }),
-      { status: 200 }
-    );
+    return new Response(JSON.stringify({ success: true, obje }), {
+      status: 200,
+    });
   } catch (err: unknown) {
     const errorMessage = err instanceof Error ? err.message : "unknown";
     console.error("Error:", errorMessage);
