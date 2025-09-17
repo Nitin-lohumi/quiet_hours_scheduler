@@ -3,10 +3,7 @@ import { createClient } from "../../../utils/supabase/Client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-export function UpdatePasswordForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function UpdatePasswordForm() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -28,7 +25,7 @@ export function UpdatePasswordForm({
   };
 
   return (
-    <div {...props} className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
+    <div className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
       <div>
         <div>
           <p className="text-2xl">Reset Your Password</p>

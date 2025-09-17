@@ -2,7 +2,7 @@ import { connectDB } from "../../../../Db/Connect";
 import { Task } from "../../../../Model/TaskModel";
 import { createClient } from "../../../../utils/supabase/server";
 import transport from "../../../../services/NodeMailer";
-export default async function Get(req: Request) {
+export default async function Get() {
   try {
     await connectDB();
     const supabase = await createClient();
@@ -34,13 +34,11 @@ export default async function Get(req: Request) {
       JSON.stringify({ success: true, remindersSent: sentCount }),
       { status: 200 }
     );
-  } catch (err: any) {
-    console.error("Error:", err);
-    return new Response(
-      JSON.stringify({ error: (err as any).message || "unknown" }),
-      {
-        status: 500,
-      }
-    );
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : "unknown";
+    console.error("Error:", errorMessage);
+    return new Response(JSON.stringify({ error: errorMessage }), {
+      status: 500,
+    });
   }
 }

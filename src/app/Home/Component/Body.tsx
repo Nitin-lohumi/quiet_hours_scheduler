@@ -15,21 +15,23 @@ function Body() {
   const [loading, setLoading] = useState(true);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  const fetchTasks = async () => {
+  const fetchTasks = React.useCallback(async () => {
     try {
       const res = await fetch(`/api/tasks/${user?.id}`);
       const data = await res.json();
       setTasks(data);
-    } catch (err) {
-      console.error("Error fetching tasks", err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error fetching tasks", err.message);
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
 
   useEffect(() => {
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure to delete this task?")) return;
@@ -43,14 +45,15 @@ function Body() {
       } else {
         alert("Failed to delete");
       }
-    } catch (err) {
-      console.error("Error deleting task", err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error  tasks", err.message);
+      }
     }
   };
 
   const handleUpdate = async () => {
     if (!editingTask) return;
-
     const selectedDateTime = new Date(
       `${editingTask.date}T${editingTask.time}`
     );
@@ -58,7 +61,6 @@ function Body() {
       alert("❌ Cannot set task in the past!");
       return;
     }
-
     try {
       const res = await fetch(`/api/tasks/${editingTask._id}`, {
         method: "PUT",
@@ -67,15 +69,17 @@ function Body() {
       });
 
       if (res.ok) {
-        setTasks((prev:any) =>
-          prev.map((t:any) => (t._id === editingTask._id ? editingTask : t))
+        setTasks((prev: Task[]) =>
+          prev.map((t: Task) => (t._id === editingTask._id ? editingTask : t))
         );
         setEditingTask(null);
       } else {
         alert("Failed to update task");
       }
-    } catch (err) {
-      console.error("Error updating task", err);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        console.error("Error tasks", err.message);
+      }
     }
   };
 

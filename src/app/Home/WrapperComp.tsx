@@ -4,7 +4,7 @@ import { createClient } from "../../../utils/supabase/Client";
 import { UseStores } from "@/stores/Store";
 function WrapperComp({ children }: { children: React.ReactNode }) {
   const { setUser } = UseStores();
-  const supabase = createClient();
+  const supabase = React.useMemo(() => createClient(), []);
   useEffect(() => {
     async function getUserData() {
       const userData = await supabase.auth.getUser();
@@ -15,7 +15,8 @@ function WrapperComp({ children }: { children: React.ReactNode }) {
       setUser(data);
     }
     getUserData();
-  }, []);
-  return <>{ children }</>;
+  }, [setUser, supabase.auth]);
+
+  return <>{children}</>;
 }
 export default WrapperComp;
