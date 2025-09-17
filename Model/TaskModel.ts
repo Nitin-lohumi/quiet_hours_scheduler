@@ -6,6 +6,7 @@ export interface ITask extends Document {
   time: string;
   userId: string;
   notified: boolean;
+  expire: boolean;
 }
 const TaskSchema = new Schema<ITask>(
   {
@@ -14,6 +15,7 @@ const TaskSchema = new Schema<ITask>(
     time: { type: String, required: true },
     userId: { type: String, required: true, index: true },
     notified: { type: Boolean, required: false, index: true },
+    expire: { type: Boolean },
   },
   { timestamps: true }
 );
