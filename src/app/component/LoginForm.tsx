@@ -4,10 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -33,7 +30,7 @@ export function LoginForm({
   };
 
   return (
-    <div {...props} className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
+    <div className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
       <div>
         <div className="p-1 mb-3">
           <p className="text-2xl text-center font-serif mb-2">Login</p>

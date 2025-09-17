@@ -4,10 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
-export function SignUpForm({
-  className,
-  ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+export function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -23,10 +20,7 @@ export function SignUpForm({
       return;
     }
     try {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -48,7 +42,7 @@ export function SignUpForm({
   };
 
   return (
-    <div {...props} className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
+    <div className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
       <div>
         <div className="p-1 mb-3">
           <p className="text-2xl text-center font-serif mb-2">SignUp</p>
@@ -91,13 +85,20 @@ export function SignUpForm({
                   onChange={(e) => setRepeatPassword(e.target.value)}
                 />
               </div>
-              <button type="submit" className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100" disabled={isLoading}>
+              <button
+                type="submit"
+                className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100"
+                disabled={isLoading}
+              >
                 {isLoading ? "Creating an account..." : "Sign up"}
               </button>
             </div>
             <div className="mt-4 text-center text-lg">
               Already have an account?{" "}
-              <Link href="/auth/login" className="underline underline-offset-4 text-blue-600">
+              <Link
+                href="/auth/login"
+                className="underline underline-offset-4 text-blue-600"
+              >
                 Login
               </Link>
             </div>

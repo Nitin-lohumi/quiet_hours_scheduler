@@ -34,7 +34,7 @@ export default async function Get(req: Request) {
       JSON.stringify({ success: true, remindersSent: sentCount }),
       { status: 200 }
     );
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error:", err);
     return new Response(
       JSON.stringify({ error: (err as any).message || "unknown" }),
