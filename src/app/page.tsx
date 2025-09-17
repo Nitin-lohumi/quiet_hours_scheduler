@@ -1,6 +1,5 @@
 import Link from "next/link";
 export default function PublicPage() {
-  console.log(process.env.SUPABASE_PUBLISHABLE_OR_ANON_KEY)
   return (
     <main className="min-h-screen flex flex-col items-center justify-center bg-gray-300 md:px-6">
       <div className="m-auto max-w-[1100px] items-center text-center space-y-6">
