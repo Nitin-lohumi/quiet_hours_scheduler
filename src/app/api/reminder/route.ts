@@ -31,6 +31,7 @@ export async function GET() {
         console.log(error && error);
         if (error || !user?.user?.email) continue;
         const email = user.user.email;
+        console.log("user:by supabse- ", user.user.email);
         await transport.sendMail({
           from: process.env.MAIL_USER!,
           to: email,
