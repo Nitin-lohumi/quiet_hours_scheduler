@@ -14,6 +14,7 @@ export async function GET() {
       $or: [{ expire: false }, { notified: false }],
     });
     obje.push(dueTasks);
+    obje.push(process.env.SUPABASE_SERVICE_ROLE_KEY);
     let sentCount = 0;
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}`);
