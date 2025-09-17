@@ -44,7 +44,7 @@ export async function GET() {
         await transport.sendMail({
           from: process.env.MAIL_USER!,
           to: email,
-          subject: `⏰ Reminder: Task "${val.task}" is due soon`,
+          subject: ` Reminder: Task "${val.task}" is due soon`,
           html: `
   <div style="font-family: Arial, sans-serif; background: #f4f7fb; padding: 20px;">
     <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
@@ -53,14 +53,14 @@ export async function GET() {
       
       <p style="font-size: 16px; color: #333;">
         Hello,<br />
-        This is a friendly reminder that your task is due <b>in 10 minutes</b>.
+        This is a reminder that your task is due <b>in 10 minutes</b>.
       </p>
       
       <div style="background: #f9f9f9; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; border-radius: 6px;">
         <p style="margin: 0; font-size: 16px; color: #333;">
-          <b>📝 Task:</b> ${val.task}<br/>
-          <b>📅 Date:</b> ${val.date}<br/>
-          <b>⏰ Time:</b> ${val.time}
+          <b> Task:</b> ${val.task}<br/>
+          <b> Date:</b> ${val.date}<br/>
+          <b> Time:</b> ${val.time}
         </p>
       </div>
       
@@ -68,7 +68,7 @@ export async function GET() {
         Please make sure to complete your task on time 
         <br/><br/>
         Thanks,<br/>
-        <b>The Quite Scheduler Team</b>
+        <b>The Quite Scheduler</b>
       </p>
     </div>
   </div>
