@@ -2,43 +2,40 @@ import { connectDB } from "../../../../Db/Connect";
 import { Task } from "../../../../Model/TaskModel";
 import { createClient } from "../../../../utils/supabase/server";
 import transport from "../../../../services/NodeMailer";
-
 export async function GET() {
   try {
     await connectDB();
     const supabase = await createClient();
-    const now = new Date();
-    const tenMinLater = new Date(now.getTime() + 10 * 60 * 1000);
-    const obje = [];
+    const nowUtc = new Date();
+    const nowIst = new Date(nowUtc.getTime() + 5.5 * 60 * 60 * 1000);
+    const tenMinLaterIst = new Date(nowIst.getTime() + 10 * 60 * 1000);
+
+    const obje: any[] = [];
     const dueTasks = await Task.find({
       $or: [{ expire: false }, { notified: false }],
     });
+
     obje.push(dueTasks);
-    obje.push(process.env.SUPABASE_SERVICE_ROLE_KEY);
     let sentCount = 0;
-    obje.push(tenMinLater);
     for (const val of dueTasks) {
-      const taskDateTime = new Date(`${val.date}T${val.time}`);
-      obje.push(taskDateTime);
-      if (taskDateTime < now) {
+      const taskDateTime = new Date(`${val.date}T${val.time}:00+05:30`);
+      obje.push({ task: val.task, taskDateTime, nowIst, tenMinLaterIst });
+      if (taskDateTime < nowIst) {
         if (!val.expire) {
-          console.log("Expired");
-          obje.push("expiree");
           await Task.updateOne({ _id: val._id }, { $set: { expire: true } });
         }
         continue;
       }
-      if (taskDateTime >= now && taskDateTime <= tenMinLater && !val.notified) {
+      if (
+        taskDateTime >= nowIst &&
+        taskDateTime <= tenMinLaterIst &&
+        !val.notified
+      ) {
         const { data: user, error } = await supabase.auth.admin.getUserById(
           val.userId
         );
-        console.log("notify");
-        console.log(error && error);
-        obje.push(error?.message, "notify");
         if (error || !user?.user?.email) continue;
         const email = user.user.email;
-        console.log("user:by supabse- ", user.user.email);
-        obje.push(user.user.email);
         await transport.sendMail({
           from: process.env.MAIL_USER!,
           to: email,
@@ -49,7 +46,7 @@ export async function GET() {
         sentCount++;
       }
     }
-    return new Response(JSON.stringify({ success: true, obje }), {
+    return new Response(JSON.stringify({ success: true, sentCount, obje }), {
       status: 200,
     });
   } catch (err: unknown) {
