@@ -31,7 +31,7 @@ export async function GET() {
         );
         console.log("notify");
         console.log(error && error);
-        obje.push(error);
+        obje.push(error?.message, "notify");
         if (error || !user?.user?.email) continue;
         const email = user.user.email;
         console.log("user:by supabse- ", user.user.email);
