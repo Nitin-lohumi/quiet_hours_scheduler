@@ -84,7 +84,7 @@ function Body() {
         editingTask?._id === task._id ? (
           <div
             key={task._id}
-            className="flex gap-2 border p-3 rounded-lg bg-gray-100"
+            className="flex flex-col gap-2 p-3 rounded-lg bg-gray-100"
           >
             <input
               type="text"
@@ -92,7 +92,7 @@ function Body() {
               onChange={(e) =>
                 setEditingTask({ ...editingTask, task: e.target.value })
               }
-              className="p-1 border rounded"
+              className="p-1 shadow-xs shadow-gray-200 rounded"
             />
             <input
               type="date"
@@ -100,7 +100,7 @@ function Body() {
               onChange={(e) =>
                 setEditingTask({ ...editingTask, date: e.target.value })
               }
-              className="p-1 border rounded"
+              className="p-1 shadow-xs shadow-gray-200 rounded"
             />
             <input
               type="time"
@@ -108,17 +108,17 @@ function Body() {
               onChange={(e) =>
                 setEditingTask({ ...editingTask, time: e.target.value })
               }
-              className="p-1 border rounded"
+              className="p-1 shadow-xs shadow-gray-200 rounded"
             />
             <button
               onClick={handleUpdate}
-              className="px-2 py-1 bg-green-500 text-white rounded"
+              className="px-2 py-1 bg-green-500 cursor-pointer text-white rounded"
             >
               Save
             </button>
             <button
               onClick={() => setEditingTask(null)}
-              className="px-2 py-1 bg-gray-400 text-white rounded"
+              className="px-2 py-1 bg-gray-400  cursor-pointer text-white rounded"
             >
               Cancel
             </button>
@@ -126,7 +126,7 @@ function Body() {
         ) : (
           <div
             key={task._id}
-            className="flex justify-between items-center border p-3 rounded-lg"
+            className="flex shadow-xs shadow-green-700 justify-between items-center p-3 rounded-lg"
           >
             <div>
               <p className="font-semibold">{task.task}</p>
@@ -138,13 +138,13 @@ function Body() {
               <button
                 onClick={() => setEditingTask(task)}
                 disabled={task.expire}
-                className="px-2 py-1 bg-blue-500 text-white rounded disabled:bg-gray-600"
+                className="px-2 py-1 bg-blue-500  cursor-pointer text-white rounded disabled:bg-gray-600"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(task._id)}
-                className="px-2 py-1 bg-red-500 text-white rounded"
+                className="px-2 py-1 bg-red-500  cursor-pointer text-white rounded"
               >
                 Delete
               </button>
@@ -157,4 +157,3 @@ function Body() {
 }
 
 export default Body;
-
