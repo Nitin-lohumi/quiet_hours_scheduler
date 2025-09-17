@@ -2,13 +2,14 @@ import { connectDB } from "../../../../Db/Connect";
 import { Task } from "../../../../Model/TaskModel";
 import { createClient } from "../../../../utils/supabase/server";
 import transport from "../../../../services/NodeMailer";
+
 export async function GET() {
   try {
     await connectDB();
     const supabase = await createClient();
-    const nowUtc = new Date();
-    const nowIst = new Date(nowUtc.getTime() + 5.5 * 60 * 60 * 1000);
-    const tenMinLaterIst = new Date(nowIst.getTime() + 10 * 60 * 1000);
+
+    const now = new Date(); // UTC
+    const tenMinLater = new Date(now.getTime() + 10 * 60 * 1000);
 
     const obje: any[] = [];
     const dueTasks = await Task.find({
@@ -17,24 +18,32 @@ export async function GET() {
 
     obje.push(dueTasks);
     let sentCount = 0;
+
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}:00+05:30`);
-      obje.push({ task: val.task, taskDateTime, nowIst, tenMinLaterIst });
-      if (taskDateTime < nowIst) {
+      obje.push({
+        task: val.task,
+        taskDateTime, 
+        now,          
+        tenMinLater, 
+      });
+      if (taskDateTime < now) {
         if (!val.expire) {
           await Task.updateOne({ _id: val._id }, { $set: { expire: true } });
         }
         continue;
       }
+
       if (
-        taskDateTime >= nowIst &&
-        taskDateTime <= tenMinLaterIst &&
+        taskDateTime >= now &&
+        taskDateTime <= tenMinLater &&
         !val.notified
       ) {
         const { data: user, error } = await supabase.auth.admin.getUserById(
           val.userId
         );
         if (error || !user?.user?.email) continue;
+
         const email = user.user.email;
         await transport.sendMail({
           from: process.env.MAIL_USER!,
@@ -42,6 +51,7 @@ export async function GET() {
           subject: `Reminder: Task "${val.task}" is due soon`,
           html: `<p>Your task <b>${val.task}</b> is due in 10 minutes.</p>`,
         });
+
         await Task.updateOne({ _id: val._id }, { $set: { notified: true } });
         sentCount++;
       }
