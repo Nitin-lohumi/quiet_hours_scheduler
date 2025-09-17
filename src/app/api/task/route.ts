@@ -5,7 +5,6 @@ import { Task } from "../../../../Model/TaskModel";
 export async function POST(req: Request) {
   await connectDB();
   const body = await req.json();
-  console.log(body);
   const selectedDateTime = new Date(`${body.date}T${body.time}`);
   if (selectedDateTime < new Date()) {
     return NextResponse.json(
