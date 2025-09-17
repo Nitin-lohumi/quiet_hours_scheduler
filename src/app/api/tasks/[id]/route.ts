@@ -9,6 +9,7 @@ export async function GET(req: Request, { params }: Props) {
   await connectDB();
   const { id } = params;
   const tasks = await Task.find({ userId: id }).sort({
+    expire:1,
     date: 1,
     time: 1,
   });

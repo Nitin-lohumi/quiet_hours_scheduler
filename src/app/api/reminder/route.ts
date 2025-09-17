@@ -23,9 +23,9 @@ export async function GET() {
       const taskDateTime = new Date(`${val.date}T${val.time}:00+05:30`);
       obje.push({
         task: val.task,
-        taskDateTime, 
-        now,          
-        tenMinLater, 
+        taskDateTime,
+        now,
+        tenMinLater,
       });
       if (taskDateTime < now) {
         if (!val.expire) {
@@ -34,11 +34,7 @@ export async function GET() {
         continue;
       }
 
-      if (
-        taskDateTime >= now &&
-        taskDateTime <= tenMinLater &&
-        !val.notified
-      ) {
+      if (taskDateTime >= now && taskDateTime <= tenMinLater && !val.notified) {
         const { data: user, error } = await supabase.auth.admin.getUserById(
           val.userId
         );
@@ -48,8 +44,35 @@ export async function GET() {
         await transport.sendMail({
           from: process.env.MAIL_USER!,
           to: email,
-          subject: `Reminder: Task "${val.task}" is due soon`,
-          html: `<p>Your task <b>${val.task}</b> is due in 10 minutes.</p>`,
+          subject: `⏰ Reminder: Task "${val.task}" is due soon`,
+          html: `
+  <div style="font-family: Arial, sans-serif; background: #f4f7fb; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background: #ffffff; border-radius: 10px; padding: 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+      
+      <h2 style="color: #e74c3c; text-align: center;"> Task Reminder</h2>
+      
+      <p style="font-size: 16px; color: #333;">
+        Hello,<br />
+        This is a friendly reminder that your task is due <b>in 10 minutes</b>.
+      </p>
+      
+      <div style="background: #f9f9f9; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; border-radius: 6px;">
+        <p style="margin: 0; font-size: 16px; color: #333;">
+          <b>📝 Task:</b> ${val.task}<br/>
+          <b>📅 Date:</b> ${val.date}<br/>
+          <b>⏰ Time:</b> ${val.time}
+        </p>
+      </div>
+      
+      <p style="font-size: 14px; color: #555;">
+        Please make sure to complete your task on time 
+        <br/><br/>
+        Thanks,<br/>
+        <b>The Quite Scheduler Team</b>
+      </p>
+    </div>
+  </div>
+  `,
         });
 
         await Task.updateOne({ _id: val._id }, { $set: { notified: true } });

@@ -73,13 +73,10 @@ function Body() {
     }
     updateMutation.mutate(editingTask);
   };
-
-  if (isLoading) return <p>Loading tasks...</p>;
-  if (isError) return <p>Error: {(error as Error).message}</p>;
-
   return (
     <div className="p-4 flex flex-col gap-4">
       <h2 className="text-xl font-bold">📌 Your Tasks</h2>
+      {isLoading && <p>fetching....</p>}
       {tasks?.map((task) =>
         editingTask?._id === task._id ? (
           <div
@@ -152,6 +149,7 @@ function Body() {
           </div>
         )
       )}
+      {isError && <p>{(error as Error).message}</p>}
     </div>
   );
 }
