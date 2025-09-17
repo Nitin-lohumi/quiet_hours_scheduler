@@ -7,7 +7,8 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   await connectDB();
-  const tasks = await Task.find({ userId: params.id }).sort({
+  const userId =  params.id;
+  const tasks = await Task.find({ userId }).sort({
     date: 1,
     time: 1,
   });

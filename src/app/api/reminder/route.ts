@@ -17,17 +17,18 @@ export async function GET() {
       const taskDateTime = new Date(`${val.date}T${val.time}`);
       if (taskDateTime < now) {
         if (!val.expire) {
+          console.log("Expired");
           await Task.updateOne({ _id: val._id }, { $set: { expire: true } });
         }
         continue;
       }
-      console.log(val.userId);
 
       if (taskDateTime >= now && taskDateTime <= tenMinLater && !val.notified) {
         const { data: user, error } = await supabase.auth.admin.getUserById(
           val.userId
         );
-        console.log(error);
+        console.log("notify");
+        console.log(error && error);
         if (error || !user?.user?.email) continue;
         const email = user.user.email;
         await transport.sendMail({
