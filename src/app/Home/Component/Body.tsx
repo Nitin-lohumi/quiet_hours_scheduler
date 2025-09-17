@@ -88,9 +88,6 @@ function Body() {
   return (
     <div className="p-4 flex flex-col gap-4">
       <h2 className="text-xl font-bold">📌 Your Tasks</h2>
-
-      {tasks.length === 0 && <p>No tasks found. Create one!</p>}
-
       {tasks.map((task) =>
         editingTask?._id === task._id ? (
           <div
@@ -162,6 +159,7 @@ function Body() {
           </div>
         )
       )}
+      {tasks.length === 0 && <p>No tasks found. Create one!</p>}
     </div>
   );
 }

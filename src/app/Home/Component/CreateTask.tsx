@@ -7,19 +7,15 @@ function CreateTask() {
     task: "",
     date: "",
     time: "",
-    userId: user?.id,
   });
   const [loading, setLoading] = useState(false);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!form.task || !form.date || !form.time||!form.userId) {
+    if (!form.task || !form.date || !form.time) {
       alert("Please fill all fields");
       return;
     }
@@ -28,12 +24,13 @@ function CreateTask() {
       const res = await fetch("/api/task", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, userId: user?.id }),
       });
 
       if (res.ok) {
         alert("✅ Task Created Successfully!");
         setForm((prev) => ({ ...prev, task: "", date: "", time: "" }));
+        window.location.reload();
       } else {
         alert("❌ Failed to create task");
       }
