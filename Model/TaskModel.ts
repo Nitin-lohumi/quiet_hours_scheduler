@@ -14,8 +14,8 @@ const TaskSchema = new Schema<ITask>(
     date: { type: String, required: true, index: true },
     time: { type: String, required: true },
     userId: { type: String, required: true, index: true },
-    notified: { type: Boolean, required: false, index: true },
-    expire: { type: Boolean },
+    notified: { type: Boolean, index: true, default: false },
+    expire: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
