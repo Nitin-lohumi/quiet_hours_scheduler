@@ -67,8 +67,8 @@ function Body() {
       });
 
       if (res.ok) {
-        setTasks((prev) =>
-          prev.map((t) => (t._id === editingTask._id ? editingTask : t))
+        setTasks((prev:any) =>
+          prev.map((t:any) => (t._id === editingTask._id ? editingTask : t))
         );
         setEditingTask(null);
       } else {
