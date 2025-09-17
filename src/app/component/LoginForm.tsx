@@ -68,20 +68,20 @@ export function LoginForm({
               <div className="flex items-center m-0">
                 <Link
                   href="/auth/forgetPassword"
-                  className="ml-auto text-sm underline-offset-4 hover:underline text-blue-600"
+                  className="ml-auto text-lg underline-offset-4 hover:underline text-blue-600"
                 >
                   Forgot your password?
                 </Link>
               </div>
               <button
                 type="submit"
-                className="w-full border cursor-pointer rounded-xs p-1 hover:bg-gray-100"
+                className="w-full border text-lg cursor-pointer rounded-xl p-1 hover:bg-gray-100"
                 disabled={isLoading}
               >
                 {isLoading ? "Logging in..." : "Login"}
               </button>
             </div>
-            <div className="mt-4 text-center text-sm">
+            <div className="mt-3 text-center text-lg">
               Don&apos;t have an account?{" "}
               <Link
                 href="/auth/signup"

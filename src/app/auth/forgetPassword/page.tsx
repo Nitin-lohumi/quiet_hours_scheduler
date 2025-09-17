@@ -28,60 +28,60 @@ export default function page() {
   };
 
   return (
-    <div>
-      {success ? (
-        <div>
+    <div className="max-h-screen min-h-screen flex justify-center item-center p-1">
+      <div className="md:max-w-[1000px]  w-fit  md:h-fit shadow-xs shadow-amber-800 rounded-xl p-3 m-auto">
+        {success ? (
           <div>
-            <p className="text-2xl">Check Your Email</p>
-            <p>Password reset instructions sent</p>
+            <div>
+              <p className="text-2xl font-serif">Check Your Email</p>
+              <p>Password reset instructions sent</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">
+                If you registered using your email and password, you will
+                receive a password reset email.
+              </p>
+            </div>
           </div>
+        ) : (
           <div>
-            <p className="text-sm text-muted-foreground">
-              If you registered using your email and password, you will receive
-              a password reset email.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <div>
-            <p className="text-2xl">Reset Your Password</p>
-            <p>
-              Type in your email and we&apos;ll send you a link to reset your
-              password
-            </p>
-          </div>
-          <div>
-            <form onSubmit={handleForgotPassword}>
-              <div className="flex flex-col gap-6">
-                <div className="grid gap-2">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+            <div>
+              <p className="text-2xl font-serif ">Reset Your Password</p>
+              <p>we will send you a link to reset your password</p>
+            </div>
+            <div>
+              <form onSubmit={handleForgotPassword}>
+                <div className="flex flex-col gap-6">
+                  <div className="grid gap-2">
+                    <label htmlFor="email">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your Email"
+                      className="p-2 pl-2 outline rounded-xl"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <button type="submit" className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100" disabled={isLoading}>
+                    {isLoading ? "Sending..." : "Send  email"}
+                  </button>
                 </div>
-                <button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Sending..." : "Send reset email"}
-                </button>
-              </div>
-              <div className="mt-4 text-center text-sm">
-                Already have an account?{" "}
-                <Link
-                  href="/auth/login"
-                  className="underline underline-offset-4"
-                >
-                  Login
-                </Link>
-              </div>
-            </form>
+                <div className="mt-4 text-lg text-center">
+                  Already have an account?{" "}
+                  <Link
+                    href="/auth/login"
+                    className="underline underline-offset-4 text-blue-600"
+                  >
+                    Login
+                  </Link>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

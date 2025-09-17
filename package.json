@@ -10,14 +10,18 @@
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",
+    "@types/nodemailer": "^7.0.1",
     "axios": "^1.12.2",
     "dotenv": "^17.2.2",
     "mongodb": "^6.19.0",
     "mongoose": "^8.18.1",
     "next": "15.5.3",
+    "nodemailer": "^7.0.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "supabase": "^2.40.7",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "typescript": "^5",

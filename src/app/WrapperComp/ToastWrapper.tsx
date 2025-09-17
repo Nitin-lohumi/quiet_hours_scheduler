@@ -6,7 +6,7 @@ function ToastWrapper({ children }: { children: React.ReactNode }) {
   return (
     <>
       {children}
-      <ToastContainer />
+      <ToastContainer draggable autoClose={1500} />
     </>
   );
 }

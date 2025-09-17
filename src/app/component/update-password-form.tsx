@@ -28,27 +28,33 @@ export function UpdatePasswordForm({
   };
 
   return (
-    <div {...props}>
+    <div {...props} className="shadow-xs shadow-amber-800 rounded-xl p-3 m-0">
       <div>
         <div>
           <p className="text-2xl">Reset Your Password</p>
           <p>Please enter your new password below.</p>
+          <hr className="border-amber-100 mb-3" />
         </div>
         <div>
           <form onSubmit={handleForgotPassword}>
             <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
+              <div className="grid gap-2 p-2">
                 <label htmlFor="password">New password</label>
                 <input
                   id="password"
                   type="password"
                   placeholder="New password"
+                  className="p-1 pl-2 outline rounded-xl"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <button type="submit" className="w-full" disabled={isLoading}>
+              <button
+                type="submit"
+                className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100"
+                disabled={isLoading}
+              >
                 {isLoading ? "Saving..." : "Save new password"}
               </button>
             </div>

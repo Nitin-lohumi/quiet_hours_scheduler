@@ -38,7 +38,7 @@ export function SignUpForm({
         "You've successfully signed up. Please check your email to confirm your account before signing in."
       );
       setTimeout(() => {
-        router.push("/auth/signUpsucess");
+        router.push("/auth/login");
       }, 1500);
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "An error occurred");

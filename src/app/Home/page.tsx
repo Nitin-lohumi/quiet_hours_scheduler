@@ -1,22 +1,16 @@
-import { redirect } from "next/navigation";
-
-import { LogoutButton } from "../component/logout-button";
-import { createClient } from "../../../utils/supabase/server";
-
+import CreateTask from "./Component/CreateTask";
+import Body from "./Component/Body";
 export default async function ProtectedPage() {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase.auth.getClaims();
-  if (error || !data?.claims) {
-    redirect("/auth/login");
-  }
-
   return (
-    <div className="flex h-svh w-full items-center justify-center gap-2">
-      <p>
-        Hello <span>{data.claims.email}</span>
-      </p>
-      <LogoutButton />
-    </div>
+    <>
+      <div className="border md:grid md:p-1 flex flex-col gap-2 p-5 w-full h-full grid-cols-4">
+        <div className="col-span-2 items-center flex justify-center w-full border">
+          <CreateTask />
+        </div>
+        <div className="col-span-2 border h-[calc(100vh-10rem)] md:h-full">
+          <Body/>
+        </div>
+      </div>
+    </>
   );
 }
