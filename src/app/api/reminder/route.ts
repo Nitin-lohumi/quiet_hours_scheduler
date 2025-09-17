@@ -9,11 +9,12 @@ export async function GET() {
     const supabase = await createClient();
     const now = new Date();
     const tenMinLater = new Date(now.getTime() + 10 * 60 * 1000);
+    const obje = [];
     const dueTasks = await Task.find({
       $or: [{ expire: false }, { notified: false }],
     });
+    obje.push(dueTasks);
     let sentCount = 0;
-    const obje = [];
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}`);
       if (taskDateTime < now) {
