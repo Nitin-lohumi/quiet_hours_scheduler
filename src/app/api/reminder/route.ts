@@ -19,6 +19,7 @@ export async function GET() {
     obje.push(tenMinLater);
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}`);
+      obje.push(taskDateTime);
       if (taskDateTime < now) {
         if (!val.expire) {
           console.log("Expired");
