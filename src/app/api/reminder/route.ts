@@ -16,6 +16,7 @@ export async function GET() {
     obje.push(dueTasks);
     obje.push(process.env.SUPABASE_SERVICE_ROLE_KEY);
     let sentCount = 0;
+    obje.push(tenMinLater);
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}`);
       if (taskDateTime < now) {
