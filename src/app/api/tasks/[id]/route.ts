@@ -2,23 +2,19 @@ import { NextResponse } from "next/server";
 import { connectDB } from "../../../../../Db/Connect";
 import { Task } from "../../../../../Model/TaskModel";
 
-export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+interface Props {
+  params: { id: string };
+}
+export async function GET(req: Request, { params }: Props) {
   await connectDB();
-  const userId =  params.id;
+  const userId = params.id;
   const tasks = await Task.find({ userId }).sort({
     date: 1,
     time: 1,
   });
   return NextResponse.json(tasks);
 }
-
-export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: Request, { params }: Props) {
   await connectDB();
   const body = await req.json();
   const selectedDateTime = new Date(`${body.date}T${body.time}`);
@@ -37,10 +33,7 @@ export async function PUT(
   return NextResponse.json(updatedTask);
 }
 
-export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(req: Request, { params }: Props) {
   await connectDB();
   const deleted = await Task.findByIdAndDelete(params.id);
   if (!deleted) {
