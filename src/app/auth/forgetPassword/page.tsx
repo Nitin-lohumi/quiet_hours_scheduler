@@ -19,6 +19,7 @@ export default function Page() {
       });
       if (error) throw error;
       setSuccess(true);
+      toast.success("Reset Link Send in Your Mail");
       router.push("/auth/login");
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "An error occurred");
@@ -64,7 +65,11 @@ export default function Page() {
                       onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
-                  <button type="submit" className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100" disabled={isLoading}>
+                  <button
+                    type="submit"
+                    className="w-full text-lg shadow-xs rounded-xl shadow-amber-800 p-1 cursor-pointer hover:bg-gray-100"
+                    disabled={isLoading}
+                  >
                     {isLoading ? "Sending..." : "Send  email"}
                   </button>
                 </div>
