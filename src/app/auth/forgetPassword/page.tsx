@@ -12,6 +12,13 @@ export default function Page() {
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     const supabase = createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      toast.info("YOU Are Already Logged In 🤣");
+      return setTimeout(() => router.push("/Home"), 1000);
+    }
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
