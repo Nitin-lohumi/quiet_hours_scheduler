@@ -43,7 +43,7 @@ export async function GET() {
       
       <p style="font-size: 16px; color: #333;">
         Hello,<br />
-        This is a reminder that your task is due <b>in 10 minutes</b>.
+        This is a reminder that your task is due <b>in less then  10 minutes</b>.
       </p>
       
       <div style="background: #f9f9f9; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; border-radius: 6px;">
