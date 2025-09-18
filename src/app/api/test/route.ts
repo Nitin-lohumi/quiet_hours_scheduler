@@ -3,7 +3,7 @@ export async function GET() {
   try {
     await transport.sendMail({
       from: 'lohuminitin@gmail.com',
-      to: "bawore2785@poesd.com",
+      to: "",
       subject: ` Reminder: Task "" is due soon`,
       html: `
   <div style="font-family: Arial, sans-serif; background: #f4f7fb; padding: 20px;">

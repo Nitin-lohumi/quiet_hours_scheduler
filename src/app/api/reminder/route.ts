@@ -32,7 +32,7 @@ export async function GET() {
 
         const email = user.user.email;
         await transport.sendMail({
-          from: process.env.MAIL_USER,
+          from: "lohuminitin@gmail.com",
           to: email,
           subject: ` Reminder: Task "${val.task}" is due soon`,
           html: `

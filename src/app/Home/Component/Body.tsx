@@ -39,7 +39,7 @@ function Body() {
     queryKey: ["tasks", user?.id],
     queryFn: () => fetchTasks(user?.id || ""),
     enabled: !!user?.id,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 1 * 60 * 1000,
   });
 
   const deleteMutation = useMutation({
