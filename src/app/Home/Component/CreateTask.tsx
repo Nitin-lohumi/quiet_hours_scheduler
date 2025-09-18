@@ -30,10 +30,10 @@ function CreateTask() {
     onSuccess: () => {
       setForm({ task: "", date: "", time: "" });
       queryClient.invalidateQueries({ queryKey: ["tasks", user?.id] });
-      toast.success("✅Task Created Successfully!");
+      toast.success("Task Created Successfully!");
     },
     onError: () => {
-      toast.error(" Failed to create task");
+      toast.error("Failed to create task");
     },
   });
 

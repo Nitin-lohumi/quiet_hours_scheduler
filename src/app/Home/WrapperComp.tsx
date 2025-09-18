@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import { createClient } from "../../../utils/supabase/Client";
 import { UseStores } from "@/stores/Store";
 function WrapperComp({ children }: { children: React.ReactNode }) {
@@ -16,7 +17,11 @@ function WrapperComp({ children }: { children: React.ReactNode }) {
     }
     getUserData();
   }, [setUser, supabase.auth]);
-  console.log(user);
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <ToastContainer autoClose={1000} position="top-center" />
+    </>
+  );
 }
 export default WrapperComp;

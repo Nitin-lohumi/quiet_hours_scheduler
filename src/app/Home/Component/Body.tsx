@@ -3,7 +3,7 @@ import { UseStores } from "@/stores/Store";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 interface Task {
   _id: string;
   task: string;
@@ -46,6 +46,10 @@ function Body() {
     mutationFn: deleteTaskApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks", user?.id] });
+      toast.success("Deleted Sucessfully");
+    },
+    onError: (err) => {
+      toast.success(err.message);
     },
   });
 
@@ -53,7 +57,11 @@ function Body() {
     mutationFn: updateTaskApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks", user?.id] });
+      toast.success("Uupdated Sucessfully");
       setEditingTask(null);
+    },
+    onError: (err) => {
+      toast.success(err.message);
     },
   });
 
@@ -124,7 +132,9 @@ function Body() {
           <div
             key={task._id}
             className={`flex shadow-xs ${
-              task.expire ? "bg-gray-300 shadow-red-400 cursor-not-allowed" : "shadow-green-700 "
+              task.expire
+                ? "bg-gray-300 shadow-red-400 cursor-not-allowed"
+                : "shadow-green-700 "
             } justify-between items-center p-3 rounded-lg`}
           >
             <div>
