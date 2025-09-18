@@ -123,7 +123,9 @@ function Body() {
         ) : (
           <div
             key={task._id}
-            className={`flex shadow-xs ${task.expire&&"bg-red-400"} shadow-green-700 justify-between items-center p-3 rounded-lg`}
+            className={`flex shadow-xs ${
+              task.expire ? "bg-gray-300 shadow-red-400 cursor-not-allowed" : "shadow-green-700 "
+            } justify-between items-center p-3 rounded-lg`}
           >
             <div>
               <p className="font-semibold">{task.task}</p>
