@@ -8,7 +8,7 @@ export async function GET() {
     await connectDB();
     const supabase = await createClient();
 
-    const now = new Date(); // UTC
+    const now = new Date();
     const tenMinLater = new Date(now.getTime() + 10 * 60 * 1000);
 
     const obje: any[] = [];
@@ -42,7 +42,7 @@ export async function GET() {
 
         const email = user.user.email;
         await transport.sendMail({
-          from: process.env.MAIL_USER!,
+          from: process.env.MAIL_USER,
           to: email,
           subject: ` Reminder: Task "${val.task}" is due soon`,
           html: `
