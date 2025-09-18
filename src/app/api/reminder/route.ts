@@ -10,23 +10,13 @@ export async function GET() {
 
     const now = new Date();
     const tenMinLater = new Date(now.getTime() + 10 * 60 * 1000);
-
-    const obje: any[] = [];
     const dueTasks = await Task.find({
       $or: [{ expire: false }, { notified: false }],
     });
-
-    obje.push(dueTasks);
     let sentCount = 0;
 
     for (const val of dueTasks) {
       const taskDateTime = new Date(`${val.date}T${val.time}:00+05:30`);
-      obje.push({
-        task: val.task,
-        taskDateTime,
-        now,
-        tenMinLater,
-      });
       if (taskDateTime < now) {
         if (!val.expire) {
           await Task.updateOne({ _id: val._id }, { $set: { expire: true } });
@@ -79,7 +69,7 @@ export async function GET() {
         sentCount++;
       }
     }
-    return new Response(JSON.stringify({ success: true, sentCount, obje }), {
+    return new Response(JSON.stringify({ success: true, sentCount }), {
       status: 200,
     });
   } catch (err: unknown) {
