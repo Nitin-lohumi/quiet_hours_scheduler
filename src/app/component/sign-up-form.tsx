@@ -24,7 +24,7 @@ export function SignUpForm() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/Home`,
+          emailRedirectTo: `https://quiet-hours-scheduler-1ew8.vercel.app/Home`,
         },
       });
       if (error) throw error;

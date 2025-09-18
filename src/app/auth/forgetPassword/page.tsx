@@ -15,7 +15,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/updatePass`,
+        redirectTo: `https://quiet-hours-scheduler-1ew8.vercel.app/auth/updatePass`,
       });
       if (error) throw error;
       setSuccess(true);
